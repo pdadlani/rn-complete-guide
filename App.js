@@ -9,6 +9,9 @@ export default function App() {
 
   const addGoalHandler = (enteredGoal) => {
     // setGoals(currentGoals => [...currentGoals, enteredGoal]);
+    if (enteredGoal.length === 0 ) {
+      return ;
+    }
     setGoals(currentGoals => [
       ...currentGoals,
       { id: Math.random().toString(), value: enteredGoal }
