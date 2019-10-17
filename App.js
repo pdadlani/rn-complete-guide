@@ -5,6 +5,7 @@ import GoalInput from './components/GoalInput';
 
 export default function App() {
   const [goals, setGoals] = useState([]);
+  const [modal, setModal] = useState(false);
 
   const addGoalHandler = (enteredGoal) => {
     // setGoals(currentGoals => [...currentGoals, enteredGoal]);
@@ -12,11 +13,22 @@ export default function App() {
       ...currentGoals,
       { id: Math.random().toString(), value: enteredGoal }
     ]);
+    setModal(false);
   };
+
+  const removeGoalHandler = goalId => {
+    setGoals(currentGoals => {
+      return currentGoals.filter(goal => goal.id !== goalId)})
+  }
+
+  const cancelGoal = () => {
+    setModal(false);
+  }
 
   return (
     <View style={styles.screen}>
-      <GoalInput addGoalHandler={addGoalHandler} />
+      <Button title="Add New Goal" onPress={() => setModal(true)} />
+      <GoalInput modal={modal} onAddGoal={addGoalHandler} onCancel={cancelGoal} />
       {/* <ScrollView style={styles.goalsContainer}>
         {goals.map(goal => (
           <View key={goal} style={styles.goal}>
@@ -27,7 +39,7 @@ export default function App() {
       <FlatList 
         keyExtractor={(item, index) => item.id}
         data={goals} renderItem={itemData => (
-          <GoalItem goalTitle={itemData.item.value} />
+          <GoalItem goalTitle={itemData.item.value} onDelete={() => removeGoalHandler(itemData.item.id)} />
       )} />
     </View>
   );
